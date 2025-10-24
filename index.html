@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prompt Builder Dashboard</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-area">
+        <h2>Prompt Builder</h2>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-section="builder">Builder</button>
+        <button class="nav-btn" data-section="enhancer">Enhancements</button>
+        <button class="nav-btn" data-section="pdfs">PDF Guides</button>
+        <button class="nav-btn" data-section="output">Output</button>
+      </nav>
+
+      <div class="footer">
+        <label class="theme-toggle">
+          <input type="checkbox" id="darkModeToggle"/>
+          <span>Dark Mode</span>
+        </label>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+
+      <!-- Builder -->
+      <section id="builder" class="section active">
+        <h1>Prompt Builder</h1>
+
+        <div class="form-group">
+          <label>Prompt Title</label>
+          <input type="text" id="promptTitle" placeholder="Example: Fix YouTube Script"/>
+        </div>
+
+        <div class="form-group">
+          <label>Topic</label>
+          <input type="text" id="topicInput" placeholder="Example: Sora2 ComfyUI"/>
+        </div>
+
+        <div class="form-group">
+          <label>Your Script</label>
+          <textarea id="scriptInput" rows="6" placeholder="Paste your YouTube script here..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Keywords</label>
+          <input type="text" id="keywordsInput" placeholder="comma,separated,keywords"/>
+        </div>
+
+        <!-- Template controls -->
+        <div class="form-group">
+          <label>Templates</label>
+          <div class="template-row">
+            <select id="templateSelect">
+              <option value="">Select Template...</option>
+            </select>
+            <button class="secondary-btn" id="saveTemplateBtn" title="Save current as new template">Save as New</button>
+            <button class="secondary-btn" id="updateTemplateBtn" title="Update selected template">Update</button>
+            <button class="danger-btn" id="deleteTemplateBtn" title="Delete selected template">Delete</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Custom Prompt Template</label>
+          <textarea id="customPromptInput" rows="14" placeholder="Paste your template here. Use [topic] and [myscript] placeholders..."></textarea>
+        </div>
+
+        <button id="generateBtn" class="primary-btn">Generate Prompt</button>
+      </section>
+
+      <!-- Enhancements -->
+      <section id="enhancer" class="section">
+        <h1>AI to Human Enhancer</h1>
+        <p class="desc">Add replacements to make phrasing more human. Left side is AI phrase, right side is human phrase.</p>
+
+        <table id="enhancementTable">
+          <thead>
+            <tr>
+              <th>AI Phrase</th>
+              <th>Human Phrase</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="enhancementBody"></tbody>
+        </table>
+        <button id="addRowBtn" class="secondary-btn">Add Replacement</button>
+      </section>
+
+      <!-- PDFs -->
+      <section id="pdfs" class="section">
+        <h1>Reference PDF Guides</h1>
+        <p class="desc">Check the PDFs your prompt should reference. You can add more names as needed.</p>
+
+        <div class="pdf-list"></div>
+        <div class="add-pdf">
+          <input type="text" id="newPdfInput" placeholder="Add new PDF name..."/>
+          <button id="addPdfBtn" class="secondary-btn">Add PDF</button>
+        </div>
+      </section>
+
+      <!-- Output -->
+      <section id="output" class="section">
+        <h1>Generated Prompt</h1>
+        <textarea id="outputText" readonly rows="20" placeholder="Your generated prompt will appear here..."></textarea>
+
+        <div class="btn-group">
+          <button id="copyBtn" class="secondary-btn">Copy</button>
+          <button id="downloadBtn" class="secondary-btn">Download .txt</button>
+          <button id="clearBtn" class="danger-btn">Clear</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Script order: globals first, then main -->
+  <script src="js/enhancements.js"></script>
+  <script src="js/pdfGuides.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
