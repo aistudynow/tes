@@ -76,6 +76,34 @@ input[type="text"], textarea, select {
 #outputText { width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--card-bg); color: var(--text); line-height: 1.5; }
 .btn-group, .template-row { display: flex; gap: 0.6rem; align-items: center; }
 
+.db-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+}
+
+.db-status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.db-status.connected .dot { background: #10b981; }
+.db-status.error .dot { background: #ef4444; animation: none; }
+.db-status.checking .dot { background: #f59e0b; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 @media (max-width: 900px) {
   .app-container { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }

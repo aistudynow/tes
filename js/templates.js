@@ -1,32 +1,65 @@
-// youtube/js/templates.js
-const API_BASE = "/youtube/php";
+// templates.js
+const API_BASE = "./php";
+
+function updateDBStatus(status, message) {
+  const statusEl = document.getElementById("dbStatus");
+  const textEl = document.getElementById("dbStatusText");
+  if (statusEl && textEl) {
+    statusEl.className = `db-status ${status}`;
+    textEl.textContent = message;
+  }
+}
 
 async function loadTemplates() {
+  updateDBStatus('checking', 'Connecting...');
   try {
     const res = await fetch(`${API_BASE}/get_templates.php`);
     const ct = res.headers.get("content-type") || "";
     const raw = await res.text();
 
     if (!ct.includes("application/json")) {
-      console.error("Non-JSON response from server:\n", raw.slice(0, 600));
-      alert("Server did not return JSON. See console for details.");
+      console.error("Non-JSON response from server:\n", raw);
+      updateDBStatus('error', 'Server error');
+      alert("Server error. Check console for details or visit php/test_connection.php to diagnose.");
       return;
     }
 
     const data = JSON.parse(raw);
+
+    // Check if there's an error in the response
+    if (data.error) {
+      console.error("Database error:", data);
+      updateDBStatus('error', 'DB connection failed');
+      let errorMsg = `Database Error: ${data.error}`;
+      if (data.hint) {
+        errorMsg += `\n\n${data.hint}`;
+      }
+      if (data.attempts) {
+        errorMsg += `\n\nConnection attempts: ${data.attempts.join(', ')}`;
+      }
+      alert(errorMsg + "\n\nVisit php/test_connection.php in your browser for detailed diagnostics.");
+      return;
+    }
+
     const select = document.getElementById("templateSelect");
     if (!select) return;
 
     select.innerHTML = `<option value="">Select Template...</option>`;
-    data.forEach((t) => {
-      const opt = document.createElement("option");
-      opt.value = t.id;
-      opt.textContent = t.title;
-      select.appendChild(opt);
-    });
+    if (Array.isArray(data)) {
+      data.forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = t.id;
+        opt.textContent = t.title;
+        select.appendChild(opt);
+      });
+      updateDBStatus('connected', `Connected (${data.length} templates)`);
+    } else {
+      updateDBStatus('connected', 'Connected');
+    }
   } catch (err) {
     console.error("loadTemplates error:", err);
-    alert("Could not load templates. Check PHP and DB connection.");
+    updateDBStatus('error', 'Connection error');
+    alert(`Could not load templates: ${err.message}\n\nVisit php/test_connection.php in your browser to test the database connection.`);
   }
 }
 

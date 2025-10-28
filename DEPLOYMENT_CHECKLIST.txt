@@ -1,0 +1,164 @@
+==========================================
+DEPLOYMENT CHECKLIST
+==========================================
+
+Follow these steps in order to ensure your Prompt Builder works correctly.
+
+STEP 1: VERIFY FILES ARE UPLOADED
+----------------------------------
+[ ] All PHP files in /php/ directory
+[ ] All JS files in /js/ directory
+[ ] All CSS files in /css/ directory
+[ ] index.html in root
+[ ] Files are readable (not 000 permissions)
+
+Command to check:
+ls -la /path/to/your/website/
+
+STEP 2: CHECK MYSQL SERVICE
+----------------------------
+[ ] MySQL/MariaDB is running
+[ ] Service is enabled to start on boot
+
+Commands:
+systemctl status mysql
+systemctl status mariadb
+
+If not running:
+systemctl start mysql
+systemctl enable mysql
+
+STEP 3: VERIFY DATABASE IN CLOUDPANEL
+--------------------------------------
+[ ] Database "promptbuilder" exists
+[ ] User "promptbuilder" exists
+[ ] User has ALL PRIVILEGES on database
+[ ] Password is: 6rs54EJXuGDu088rADLh
+
+In CloudPanel:
+1. Go to "Databases"
+2. Check if database and user exist
+3. If not, create them with the credentials above
+
+STEP 4: GRANT MYSQL PERMISSIONS
+--------------------------------
+[ ] User can connect from localhost
+[ ] User can connect from 127.0.0.1
+
+Commands (as MySQL root):
+mysql -u root -p
+
+Then run:
+CREATE DATABASE IF NOT EXISTS promptbuilder;
+GRANT ALL PRIVILEGES ON promptbuilder.* TO 'promptbuilder'@'localhost' IDENTIFIED BY '6rs54EJXuGDu088rADLh';
+GRANT ALL PRIVILEGES ON promptbuilder.* TO 'promptbuilder'@'127.0.0.1' IDENTIFIED BY '6rs54EJXuGDu088rADLh';
+FLUSH PRIVILEGES;
+EXIT;
+
+STEP 5: TEST CONNECTION
+------------------------
+[ ] Visit: https://comfyuiblog.com/youtube/php/test_connection.php
+[ ] Page loads without 404 error
+[ ] Shows "Connection successful"
+[ ] Shows templates table verified
+[ ] No red error boxes
+
+If you see errors, note them and check:
+- MySQL is running
+- Credentials are correct
+- User has permissions
+
+STEP 6: TEST MAIN APPLICATION
+------------------------------
+[ ] Visit: https://comfyuiblog.com/youtube/
+[ ] Page loads completely
+[ ] Sidebar shows green "Connected" status
+[ ] Template dropdown is visible
+[ ] No JavaScript errors in console (F12)
+[ ] Can type in input fields
+
+STEP 7: TEST FUNCTIONALITY
+---------------------------
+[ ] Can enter prompt title
+[ ] Can add topic
+[ ] Can paste script
+[ ] Can add/remove enhancement rows
+[ ] Can add/check PDF guides
+[ ] Can generate prompt
+[ ] Can save new template
+[ ] Can load saved template
+[ ] Can update template
+[ ] Can delete template
+[ ] Dark mode toggle works
+
+STEP 8: VERIFY DATA PERSISTENCE
+--------------------------------
+[ ] Save a test template
+[ ] Refresh the page
+[ ] Template appears in dropdown
+[ ] Can load the saved template
+[ ] Content is correct
+
+TROUBLESHOOTING CHECKLIST
+--------------------------
+If something doesn't work:
+
+[ ] Checked browser console (F12) for errors
+[ ] Verified all files uploaded correctly
+[ ] Confirmed MySQL is running
+[ ] Tested with test_connection.php
+[ ] Checked file permissions (should be 644 for .php files)
+[ ] Verified database credentials
+[ ] Cleared browser cache
+[ ] Tried different browser
+[ ] Checked PHP error logs
+
+FILE PERMISSIONS
+----------------
+Should be:
+- Directories: 755 (drwxr-xr-x)
+- PHP files: 644 (-rw-r--r--)
+- HTML/CSS/JS: 644 (-rw-r--r--)
+
+Commands to fix:
+chmod 755 /path/to/website/php/
+chmod 644 /path/to/website/php/*.php
+chmod 644 /path/to/website/*.html
+chmod 644 /path/to/website/js/*.js
+chmod 644 /path/to/website/css/*.css
+
+COMMON ISSUES & FIXES
+---------------------
+
+Issue: 404 on test_connection.php
+Fix: Check file path, verify file was uploaded
+
+Issue: "mysqli extension not loaded"
+Fix: Install PHP mysqli: apt-get install php-mysqli
+
+Issue: "Access denied for user"
+Fix: Run GRANT commands from Step 4
+
+Issue: "Can't connect to MySQL server"
+Fix: Check MySQL is running (Step 2)
+
+Issue: Empty template dropdown
+Fix: This is normal if no templates saved yet
+
+Issue: JavaScript errors
+Fix: Check browser console, verify all JS files loaded
+
+SUCCESS CRITERIA
+----------------
+✓ test_connection.php shows all green
+✓ Main page shows green "Connected" status
+✓ Can save and load templates
+✓ No errors in browser console
+✓ All features work as expected
+
+CONTACT INFO
+------------
+For more help, check:
+- QUICK_START.txt (Quick reference)
+- SETUP_GUIDE.txt (Detailed troubleshooting)
+- FIXES_APPLIED.txt (What was changed)

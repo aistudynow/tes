@@ -1,0 +1,60 @@
+==========================================
+QUICK START - PROMPT BUILDER
+==========================================
+
+STEP 1: TEST THE CONNECTION
+----------------------------
+Open this URL in your browser:
+https://comfyuiblog.com/youtube/php/test_connection.php
+
+✓ GREEN SUCCESS? → Your app is ready! Go to Step 2.
+✗ RED ERRORS? → See SETUP_GUIDE.txt for troubleshooting.
+
+STEP 2: OPEN YOUR APP
+---------------------
+Visit: https://comfyuiblog.com/youtube/
+
+Look at the sidebar bottom:
+- Green dot = Connected (Everything works!)
+- Red dot = Error (Check test_connection.php)
+
+STEP 3: USE YOUR APP
+--------------------
+Builder Tab:
+- Add prompt title and topic
+- Paste your script
+- Select or create templates
+- Use [topic] and [myscript] as placeholders
+
+Enhancements Tab:
+- Add AI phrases and human replacements
+- Example: "utilize" → "use"
+
+PDF Guides Tab:
+- Check which PDFs to reference
+- Add custom PDF names
+
+Output Tab:
+- View generated prompt
+- Copy or download
+
+DATABASE INFO:
+--------------
+Database: promptbuilder
+User: promptbuilder
+Password: 6rs54EJXuGDu088rADLh
+
+HELP RESOURCES:
+---------------
+- FIXES_APPLIED.txt - What was fixed
+- SETUP_GUIDE.txt - Detailed troubleshooting
+- php/test_connection.php - Connection diagnostics
+- Browser Console (F12) - Error details
+
+SUPPORT:
+--------
+If errors persist:
+1. Check that MySQL is running
+2. Verify database exists in CloudPanel
+3. Check file permissions (chmod 644 php/*.php)
+4. Review error messages in browser console

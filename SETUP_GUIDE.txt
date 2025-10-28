@@ -1,0 +1,94 @@
+========================================
+PROMPT BUILDER - SETUP & TROUBLESHOOTING
+========================================
+
+Your Prompt Builder application is configured to connect to:
+- Database: promptbuilder
+- User: promptbuilder
+- Password: 6rs54EJXuGDu088rADLh
+
+QUICK START:
+------------
+1. Open your website in a browser: https://comfyuiblog.com/youtube/
+2. If you see database errors, follow the steps below
+
+TROUBLESHOOTING:
+----------------
+
+STEP 1: Test Database Connection
+Visit this URL in your browser:
+https://comfyuiblog.com/youtube/php/test_connection.php
+
+This will test all possible MySQL connections and show you:
+- Which connection method works
+- MySQL server version
+- Whether the templates table exists
+- Number of templates in the database
+
+STEP 2: Check CloudPanel Settings
+If the connection test fails:
+1. Log into CloudPanel
+2. Go to "Databases"
+3. Verify database "promptbuilder" exists
+4. Verify user "promptbuilder" exists and has permissions
+5. Check the password matches: 6rs54EJXuGDu088rADLh
+
+STEP 3: Check MySQL is Running
+SSH into your server and run:
+systemctl status mysql
+or
+systemctl status mariadb
+
+If stopped, start it:
+systemctl start mysql
+
+STEP 4: Grant Proper Permissions
+Log into MySQL as root:
+mysql -u root -p
+
+Then run:
+GRANT ALL PRIVILEGES ON promptbuilder.* TO 'promptbuilder'@'localhost' IDENTIFIED BY '6rs54EJXuGDu088rADLh';
+GRANT ALL PRIVILEGES ON promptbuilder.* TO 'promptbuilder'@'127.0.0.1' IDENTIFIED BY '6rs54EJXuGDu088rADLh';
+FLUSH PRIVILEGES;
+
+STEP 5: Check File Permissions
+Make sure PHP files are readable:
+cd /path/to/your/website
+chmod 644 php/*.php
+chmod 755 php
+
+COMMON ISSUES:
+--------------
+
+Issue: "Database connection failed"
+Fix: Check that MySQL is running and credentials are correct
+
+Issue: "Could not load templates"
+Fix: Visit test_connection.php to see detailed error messages
+
+Issue: "Server did not return JSON"
+Fix: Check PHP error logs for syntax errors
+
+Issue: "Access denied for user"
+Fix: Verify password and grant proper permissions in MySQL
+
+CONFIGURATION:
+--------------
+If you need to change database settings, edit:
+php/db.php (lines 18-20)
+
+The app tries these connection methods automatically:
+1. TCP to 127.0.0.1:3306
+2. localhost:3306
+3. Unix socket /var/run/mysqld/mysqld.sock
+4. Unix socket /tmp/mysql.sock
+
+FEATURES:
+---------
+✓ Build custom prompts with templates
+✓ Save and manage templates
+✓ AI to Human phrase enhancement
+✓ PDF reference guides
+✓ Dark mode support
+
+For more help, check the browser console (F12) for detailed error messages.
