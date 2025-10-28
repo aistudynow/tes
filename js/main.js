@@ -66,6 +66,7 @@ $("generateBtn").addEventListener("click", () => {
   const title = $("promptTitle").value.trim();
   const topic = $("topicInput").value.trim();
   const script = $("scriptInput").value.trim();
+  const youtubeDesc = $("youtubeDescInput").value.trim();
   const keywords = $("keywordsInput").value.trim();
   const template = $("customPromptInput").value.trim();
 
@@ -83,12 +84,23 @@ $("generateBtn").addEventListener("click", () => {
     return { aiText: inputs[0].value, humanText: inputs[1].value };
   });
 
+  // Create humanized version of script using enhancement replacements
+  let humanizedScript = script;
+  replacements.forEach(({ aiText, humanText }) => {
+    if (!aiText || !humanText) return;
+    const regex = new RegExp(aiText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    humanizedScript = humanizedScript.replace(regex, humanText);
+  });
+
   // Build from template first
   let output = template || "";
 
   // Replace placeholders
   output = output.replace(/\[topic\]/gi, topic);
   output = output.replace(/\[myscript\]/gi, script);
+  output = output.replace(/\[youtubedescription\]/gi, youtubeDesc);
+  output = output.replace(/\[keywords\]/gi, keywords);
+  output = output.replace(/\[human\]/gi, humanizedScript);
 
   // If user gave title, topic, keywords, add a small header above template
   let header = "";
@@ -98,13 +110,6 @@ $("generateBtn").addEventListener("click", () => {
   if (selectedPdfs.length) header += `Use these PDF guides: ${selectedPdfs.join(", ")}\n\n`;
 
   output = header + output;
-
-  // Apply humanization replacements
-  replacements.forEach(({ aiText, humanText }) => {
-    if (!aiText || !humanText) return;
-    const regex = new RegExp(aiText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
-    output = output.replace(regex, humanText);
-  });
 
   $("outputText").value = output;
 
@@ -138,6 +143,7 @@ $("clearBtn").addEventListener("click", () => {
   $("promptTitle").value = "";
   $("topicInput").value = "";
   $("scriptInput").value = "";
+  $("youtubeDescInput").value = "";
   $("keywordsInput").value = "";
   // do not clear template so you can keep working
 });
