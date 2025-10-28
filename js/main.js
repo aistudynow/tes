@@ -79,18 +79,54 @@ $("generateBtn").addEventListener("click", () => {
   const selectedPdfs = Array.from(document.querySelectorAll(".pdf-check:checked")).map(cb => cb.value);
 
   // enhancement pairs
-  const replacements = Array.from(enhancementBody.querySelectorAll("tr")).map((row) => {
+  const enhancementEntries = Array.from(enhancementBody.querySelectorAll("tr")).map((row) => {
     const inputs = row.querySelectorAll("input");
-    return { aiText: inputs[0].value, humanText: inputs[1].value };
+    return { aiText: inputs[0].value.trim(), humanText: inputs[1].value.trim() };
+  });
+
+  const replacementPairs = [];
+  const additionOnly = [];
+
+  enhancementEntries.forEach(({ aiText, humanText }) => {
+    if (!humanText) return;
+    if (aiText) {
+      replacementPairs.push({ aiText, humanText });
+    } else {
+      additionOnly.push(humanText);
+    }
   });
 
   // Create humanized version of script using enhancement replacements
   let humanizedScript = script;
-  replacements.forEach(({ aiText, humanText }) => {
-    if (!aiText || !humanText) return;
+  replacementPairs.forEach(({ aiText, humanText }) => {
     const regex = new RegExp(aiText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
     humanizedScript = humanizedScript.replace(regex, humanText);
   });
+
+
+ const replacementsSummary = replacementPairs
+    .map(({ aiText, humanText }) => `instead of "${aiText}"\nuse human words "${humanText}"`)
+    .join("\n\n");
+
+  const additionsBlock = additionOnly.join("\n");
+
+  let humanPlaceholderContent = humanizedScript;
+  if (additionsBlock) {
+    humanPlaceholderContent = humanPlaceholderContent
+      ? `${humanPlaceholderContent}\n\n${additionsBlock}`
+      : additionsBlock;
+  }
+
+  if (replacementsSummary) {
+    const summary = `human words\n\n${replacementsSummary}`;
+    humanPlaceholderContent = humanPlaceholderContent
+      ? `${humanPlaceholderContent}\n\n${summary}`
+      : summary;
+  }
+
+
+
+
 
   // Build from template first
   let output = template || "";
@@ -100,7 +136,7 @@ $("generateBtn").addEventListener("click", () => {
   output = output.replace(/\[myscript\]/gi, script);
   output = output.replace(/\[youtubedescription\]/gi, youtubeDesc);
   output = output.replace(/\[keywords\]/gi, keywords);
-  output = output.replace(/\[human\]/gi, humanizedScript);
+  output = output.replace(/\[human\]/gi, humanPlaceholderContent);
 
   // If user gave title, topic, keywords, add a small header above template
   let header = "";
